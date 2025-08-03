@@ -240,6 +240,34 @@
             box-shadow: var(--chat-shadow-sm);
             border: 1px solid var(--chat-color-light);
         }
+        
+                .persistent-suggested-questions {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          padding: 10px 16px 0;
+          background: var(--chat-color-surface);
+          border-top: 1px solid var(--chat-color-light);
+        }
+        
+        .suggested-question-btn.always-visible {
+          background: #f3f4f6;
+          border: 1px solid var(--chat-color-light);
+          border-radius: var(--chat-radius-full);
+          padding: 8px 14px;
+          font-size: 13px;
+          color: var(--chat-color-text);
+          cursor: pointer;
+          transition: var(--chat-transition);
+          font-family: inherit;
+          line-height: 1.4;
+        }
+        
+        .suggested-question-btn.always-visible:hover {
+          background: var(--chat-color-light);
+          border-color: var(--chat-color-primary);
+        }
+
 
         .chat-assist-widget .typing-dot {
             width: 8px;
@@ -655,7 +683,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
         </svg>
-        <span class="chat-launcher-text">Need help?</span>`;
+        <span class="chat-launcher-text">¿Necesitas Ayuda?</span>`;
     
     // Add elements to DOM
     widgetRoot.appendChild(chatWindow);
@@ -668,7 +696,25 @@
     const messagesContainer = chatWindow.querySelector('.chat-messages');
     const messageTextarea = chatWindow.querySelector('.chat-textarea');
     const sendButton = chatWindow.querySelector('.chat-submit');
+    // Crear botones persistentes de preguntas sugeridas
+    const controlsContainer = chatWindow.querySelector('.chat-controls');
     
+    const suggestedQuestionsContainer = document.createElement('div');
+    suggestedQuestionsContainer.className = 'persistent-suggested-questions';
+    
+    settings.suggestedQuestions.forEach(question => {
+      const button = document.createElement('button');
+      button.className = 'suggested-question-btn always-visible';
+      button.textContent = question;
+      button.addEventListener('click', () => {
+        submitMessage(question);
+      });
+      suggestedQuestionsContainer.appendChild(button);
+    });
+
+// Insertar los botones justo encima de la caja de texto
+controlsContainer.parentNode.insertBefore(suggestedQuestionsContainer, controlsContainer);
+
     // Registration form elements
     const registrationForm = chatWindow.querySelector('.registration-form');
     const userRegistration = chatWindow.querySelector('.user-registration');
