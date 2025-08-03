@@ -545,8 +545,8 @@
             welcomeText: '',
             responseTimeText: '',
             poweredBy: {
-                text: 'Powered by n8n',
-                link: 'https://n8n.partnerlinks.io/fabimarkl'
+                text: 'This session is powered by AI and its responses may not always be completely accurate. This chat may be recorded and used in line with our Privacy Policy.',
+                link: 'https://www.thewiseskill.com/politica-privacidad/'
             }
         },
         style: {
@@ -565,12 +565,11 @@
             webhook: { ...defaultSettings.webhook, ...window.ChatWidgetConfig.webhook },
             branding: { ...defaultSettings.branding, ...window.ChatWidgetConfig.branding },
             style: { 
-                ...defaultSettings.style, 
-                ...window.ChatWidgetConfig.style,
-                // Force green colors if user provided purple
-                primaryColor: window.ChatWidgetConfig.style?.primaryColor === '#854fff' ? '#10b981' : (window.ChatWidgetConfig.style?.primaryColor || '#10b981'),
-                secondaryColor: window.ChatWidgetConfig.style?.secondaryColor === '#6b3fd4' ? '#059669' : (window.ChatWidgetConfig.style?.secondaryColor || '#059669')
-            },
+              ...defaultSettings.style,
+              ...window.ChatWidgetConfig.style,
+              primaryColor: window.ChatWidgetConfig.style?.primaryColor || defaultSettings.style.primaryColor,
+              secondaryColor: window.ChatWidgetConfig.style?.secondaryColor || defaultSettings.style.secondaryColor
+            }        
             suggestedQuestions: window.ChatWidgetConfig.suggestedQuestions || defaultSettings.suggestedQuestions
         } : defaultSettings;
 
