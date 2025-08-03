@@ -597,7 +597,7 @@
               ...window.ChatWidgetConfig.style,
               primaryColor: window.ChatWidgetConfig.style?.primaryColor || defaultSettings.style.primaryColor,
               secondaryColor: window.ChatWidgetConfig.style?.secondaryColor || defaultSettings.style.secondaryColor
-            }        
+            },        
             suggestedQuestions: window.ChatWidgetConfig.suggestedQuestions || defaultSettings.suggestedQuestions
         } : defaultSettings;
 
