@@ -602,7 +602,7 @@
         } : defaultSettings;
 
     // Session tracking
-    let conversationId = '';
+    let conversationId = window.ChatWidgetConfig?.webhook?.sessionId || '';
     let isWaitingForResponse = false;
 
     // Create widget DOM structure
