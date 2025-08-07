@@ -3,6 +3,12 @@
     // Initialize widget only once
     if (window.N8nChatWidgetLoaded) return;
     window.N8nChatWidgetLoaded = true;
+    
+    // ✅ Generar un sessionId válido solo por sesión de navegador
+if (!sessionStorage.getItem('n8n-session-id')) {
+  sessionStorage.setItem('n8n-session-id', crypto.randomUUID());
+}
+const sessionId = sessionStorage.getItem('n8n-session-id');
 
     // Load font resource - using Poppins for a fresh look
     const fontElement = document.createElement('link');
@@ -602,7 +608,7 @@
         } : defaultSettings;
 
     // Session tracking
-    let conversationId = window.ChatWidgetConfig?.webhook?.sessionId || '';
+    let conversationId = sessionId;
     let isWaitingForResponse = false;
 
     // Create widget DOM structure
