@@ -5,11 +5,21 @@
     window.N8nChatWidgetLoaded = true;
     
     // ✅ Generar un sessionId válido solo por sesión de navegador
+    // Antiguo usando sessionStorage
+    /*
 if (!sessionStorage.getItem('n8n-session-id')) {
   sessionStorage.setItem('n8n-session-id', crypto.randomUUID());
 }
 const sessionId = sessionStorage.getItem('n8n-session-id');
+*/
+    // Nuevo usando localStorage
+if (!localStorage.getItem('n8n-client-id')) {
+  localStorage.setItem('n8n-client-id', crypto.randomUUID());
+}
+const clientId = localStorage.getItem('n8n-client-id');
+let conversationId = clientId;
 
+    
     // Load font resource - using Poppins for a fresh look
     const fontElement = document.createElement('link');
     fontElement.rel = 'stylesheet';
