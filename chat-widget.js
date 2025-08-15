@@ -589,7 +589,7 @@ let conversationId = clientId;
             welcomeText: '',
             responseTimeText: '',
             poweredBy: {
-                text: 'This session is powered by AI and its responses may not always be completely accurate. This chat may be recorded and used in line with our Privacy Policy.',
+                text: 'Esta sesión funciona con inteligencia artificial y sus respuestas pueden no ser siempre completamente precisas. Este chat puede ser grabado y utilizado de acuerdo con nuestra Política de Privacidad.',
                 link: 'https://www.thewiseskill.com/politica-privacidad/'
             }
         },
@@ -676,7 +676,7 @@ let conversationId = clientId;
         <div class="chat-body">
             <div class="chat-messages"></div>
             <div class="chat-controls">
-                <textarea class="chat-textarea" placeholder="Type your message here..." rows="1"></textarea>
+                <textarea class="chat-textarea" placeholder="Hazme una pregunta." rows="1"></textarea>
                 <button class="chat-submit">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M22 2L11 13"></path>
