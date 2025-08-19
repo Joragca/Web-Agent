@@ -618,7 +618,7 @@ let conversationId = clientId;
         } : defaultSettings;
 
     // Session tracking
-    let conversationId = sessionId;
+    //let conversationId = sessionId;
     let isWaitingForResponse = false;
 
     // Create widget DOM structure
