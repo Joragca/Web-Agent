@@ -84,7 +84,8 @@ const overrideForm = setInterval(() => {
 // =========================
 (function loadChatWidget() {
   const script = document.createElement('script');
-  script.src = 'https://cdn.jsdelivr.net/gh/Joragca/Web-Agent@v1.0.4/chat-widget.js';
+  script.src = 'https://cdn.jsdelivr.net/gh/Joragca/Web-Agent@v1.0.6/chat-widget.js';
   script.defer = true;
   document.head.appendChild(script);
 })();
+
