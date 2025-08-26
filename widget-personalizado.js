@@ -2,12 +2,18 @@
 // Configuración personalizada del widget
 // =========================
 
-// Generar y guardar un ID único persistente
-let clientId = localStorage.getItem('client-id');
-if (!clientId) {
-  clientId = crypto.randomUUID();
-  localStorage.setItem('client-id', clientId);
-}
+// Generar y guardar un ID único persistente (unificado)
+(function initClientId() {
+  var id = localStorage.getItem('n8n-client-id') || localStorage.getItem('client-id');
+  if (!id) {
+    id = (window.crypto && window.crypto.randomUUID)
+      ? window.crypto.randomUUID()
+      : Math.random().toString(36).slice(2, 12);
+  }
+  localStorage.setItem('n8n-client-id', id);
+  localStorage.setItem('client-id', id); // compatibilidad
+})();
+
 
 // Configuración del widget
 window.ChatWidgetConfig = {
@@ -31,37 +37,38 @@ window.ChatWidgetConfig = {
   suggestedQuestions: ['¿Qué tipo de skills evaluáis?', '¿Qué hacéis exactamente en The Wise Skill?']
 };
 
-// =========================
-// Parche para inyectar clientId en cada mensaje
-// =========================
-const waitForSubmitPatch = setInterval(() => {
-  if (typeof submitMessage === 'function') {
-    clearInterval(waitForSubmitPatch);
+// Inyectar sessionId/metadata envolviendo fetch (sin depender de submitMessage)
+(function patchFetchForSession() {
+  var originalFetch = window.fetch;
+  window.fetch = function (url, options) {
+    try {
+      var u = (typeof url === 'string') ? url : (url && url.url);
+      var isWebhook = u && u.indexOf(window.ChatWidgetConfig.webhook.url) === 0;
+      var method = (options && options.method ? options.method : 'GET').toUpperCase();
 
-    const originalSubmitMessage = submitMessage;
-    const clientId = localStorage.getItem('client-id');
+      if (isWebhook && method === 'POST' && options) {
+        var body = options.body ? JSON.parse(options.body) : null;
 
-    submitMessage = function(messageText) {
-      const originalFetch = window.fetch;
-      window.fetch = function(url, options) {
-        try {
-          const body = JSON.parse(options.body);
-          body.sessionId = clientId;
-          body.metadata = {
-            ...body.metadata,
-            clientId: clientId
-          };
-          options.body = JSON.stringify(body);
-        } catch (e) {
-          console.error('Error injecting clientId/sessionId:', e);
+        // Si el cuerpo es un array (p.ej. loadPreviousSession), no lo tocamos
+        if (Array.isArray(body)) {
+          return originalFetch.apply(this, arguments);
         }
-        window.fetch = originalFetch;
-        return originalFetch(url, options);
-      };
-      return originalSubmitMessage(messageText);
-    };
-  }
-}, 300);
+
+        if (body && typeof body === 'object') {
+          var id = localStorage.getItem('n8n-client-id');
+          body.sessionId = body.sessionId || id;
+          body.metadata = Object.assign({}, body.metadata || {}, { clientId: id });
+          options.body = JSON.stringify(body);
+        }
+      }
+    } catch (e) {
+      console.warn('Fetch patch error:', e);
+    }
+    return originalFetch.apply(this, arguments);
+  };
+})();
+
+
 
 // =========================
 // Forzar bypass en el registro de usuario
@@ -88,5 +95,6 @@ const overrideForm = setInterval(() => {
   script.defer = true;
   document.head.appendChild(script);
 })();
+
 
 
