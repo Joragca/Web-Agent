@@ -37,6 +37,71 @@ window.ChatWidgetConfig = {
   suggestedQuestions: ['¿Qué tipo de skills evaluáis?', '¿Qué hacéis exactamente en The Wise Skill?']
 };
 
+// ===== Overrides de estilo para volver al look anterior =====
+(function addWidgetStyleOverrides() {
+  const css = `
+  /* Contenedor de los botones persistentes */
+  .chat-assist-widget .persistent-suggested-questions {
+    display:flex !important;
+    flex-wrap:wrap !important;
+    gap:8px !important;
+    padding:8px 12px !important;
+    justify-content:flex-start !important;
+    background:transparent !important;
+    border-top:none !important;
+  }
+
+  /* Botones sugeridos tipo "pill" transparentes */
+  .chat-assist-widget .suggested-question-btn.always-visible {
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    padding:4px 12px !important;
+    font-size:12px !important;
+    border-radius:20px !important;
+    border:1px solid var(--chat-widget-primary, #7BA8FF) !important;
+    background-color:transparent !important;
+    color:var(--chat-widget-primary, #7BA8FF) !important;
+    cursor:pointer !important;
+    transition:background-color .2s !important;
+    white-space:nowrap !important;
+    flex-shrink:0 !important;
+    margin:4px 4px 0 0 !important;
+    width:auto !important;
+    max-width:100% !important;
+  }
+
+  .chat-assist-widget .suggested-question-btn.always-visible:hover {
+    background-color:rgba(123,168,255,.1) !important;
+    border-color:var(--chat-widget-primary, #7BA8FF) !important;
+  }
+
+  /* Textarea más compacta */
+  .chat-assist-widget .chat-textarea {
+    min-height:28px !important;
+    height:auto !important;
+    padding:4px 10px !important;
+    font-size:13px !important;
+    line-height:1.2 !important;
+    resize:none !important;
+  }
+
+  /* Pie del widget (gris y pequeño, sin heredar estilos globales) */
+  .chat-assist-widget .chat-footer-link {
+    font-size:10px !important;
+    color:#9ca3af !important;
+    text-align:center !important;
+    display:block !important;
+    text-decoration:none !important;
+  }
+  `;
+  const style = document.createElement('style');
+  style.textContent = css;
+  document.head.appendChild(style);
+})();
+
+
+
 // Inyectar sessionId/metadata envolviendo fetch (sin depender de submitMessage)
 (function patchFetchForSession() {
   var originalFetch = window.fetch;
@@ -95,6 +160,7 @@ const overrideForm = setInterval(() => {
   script.defer = true;
   document.head.appendChild(script);
 })();
+
 
 
 
