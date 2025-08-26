@@ -87,13 +87,64 @@ const overrideForm = setInterval(() => {
 }, 300);
 
 // =========================
-// 🚀 Cargar automáticamente el widget real
+// 🚀 Cargar el widget base y aplicar overrides DESPUÉS de cargarlo
 // =========================
 (function loadChatWidget() {
   const script = document.createElement('script');
   script.src = 'https://cdn.jsdelivr.net/gh/Joragca/Web-Agent@main/chat-widget.js?v=' + Date.now();
   script.defer = true;
+
+  script.onload = () => {
+    // Overrides de estilo — se inyectan después del base para ganar la cascada
+    const style = document.createElement('style');
+    style.id = 'tws-widget-overrides';
+    style.textContent = `
+      /* Aísla de CSS global del sitio */
+      .chat-assist-widget, .chat-assist-widget * { box-sizing: border-box; }
+
+      /* Controles: textarea y botón con la MISMA altura */
+      .chat-assist-widget .chat-controls { align-items: center !important; }
+      .chat-assist-widget .chat-textarea {
+        height: 48px !important;
+        min-height: 48px !important;
+        max-height: 48px !important;
+        overflow-y: auto !important;
+        line-height: 1.4 !important;
+        padding: 12px 14px !important;
+      }
+      .chat-assist-widget .chat-submit {
+        flex: 0 0 48px !important;
+        width: 48px !important;
+        height: 48px !important;
+      }
+
+      /* Disclaimer: gris y pequeño (no azul) */
+      .chat-assist-widget .chat-footer { padding: 8px 12px !important; }
+      .chat-assist-widget .chat-footer-link {
+        color: var(--chat-widget-text, #1f2937) !important;
+        opacity: .6 !important;
+        font-size: 12px !important;
+        text-decoration: none !important;
+      }
+
+      /* Chips de preguntas persistentes */
+      .chat-assist-widget .persistent-suggested-questions {
+        padding: 8px 16px 0 !important;
+        background: var(--chat-color-surface);
+        border-top: 1px solid var(--chat-color-light);
+        gap: 8px !important;
+      }
+      .chat-assist-widget .suggested-question-btn.always-visible {
+        border-radius: 9999px !important;
+        padding: 8px 14px !important;
+      }
+    `;
+    document.head.appendChild(style);
+  };
+
   document.head.appendChild(script);
 })();
+
+
 
 
